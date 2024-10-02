@@ -1,20 +1,62 @@
-import java.util.Scanner;        // I use the class Scanner to make my project able to make use of inputs (unencrypted message)
+// Beskeden som skal krypteres
+String OriginalMsg = "Hej, med dig. Dette er en test ;) 123?[]";
 
-String msg;                      // This variable contains the original (unencrypted) message/input
-String encMsg;                   // This variable contains the message/input after it has been encrypted;
-int shift = 3;                   // This variable determains how may letters a message/input will be shifted.
-                                 // Fx. 'a' -> 'd' because 'd' is 3 letters further to the right compared to 'a'
+String userInput = "";
+boolean isMessageInputComplete = false;
+boolean isCaesarInputComplete = false;
+
+// Dette er tallet som bestemmer hvor mange felter hver karakter i 'OriginalMsg' skal rykkes.
+int caesarInt = 4;
+
 
 void setup() {
-  size(400, 400);                // The size of my window is 400 px along both the X- & Y-axis.
+  size(400, 400);
+  background(255);
+  textSize(25);
+  fill(0);
+  println();
+  
+  
+   // Instantiere jeg et objekt fra klassen CaesarCipher og jeg kalder den for cipher.
+   CaesarCipher cipher = new CaesarCipher(OriginalMsg, caesarInt);
+   
+   println("Original besked, før den er krypteret: \n" + OriginalMsg + "\n");
+   
+   // Initialisere jeg en string og kalder funktionen encrypt(), som kryptere den modtagede besked
+   String encryptedMsg = cipher.encrypt();
+   println("Krypteret besked: \n" + encryptedMsg + "\n");
+   
+   // Her initialisere jeg en string som jeg kalder 'decMsg'.
+   // Denne string er et produkt at medtoden 'decrypt', som tager beskeden 'encMsg' fra objektet cipher,
+   // og den bruger bruger tallet 'caesarfInt' til at dekryptere beskeden.
+   // Tallet caesarInt kommer også fra 'encMsg' instansen af objektet .
+   
+   
+   // Instantiere et nyt object af klassen CaesarCipher.
+   CaesarCipher decipher = new CaesarCipher(encryptedMsg, caesarInt);
+   
+   // Erklærer variablen 'decryptMsg'
+   String decryptedMsg = decipher.decrypt();
+   println("Dekrypteret besked: \n" + decryptedMsg + "\n");
+   
+   println(cipher.toString());
+   String normalMessage = reverseString(cipher.toString());
+   println(normalMessage +"\n");
+   
+   println(cipher.encrypt());
+   println(cipher.toString());
+   println(decipher.toString());
+   println(decipher.decrypt());
+  
 }
 
-void draw() {
-}
 
-String getInput(String prompt){  // This method receives the userinput from the terminal. So I can encrypt the message/input later in the encryptMessage method.
-  print(prompt);                 // Print the message/input before it gets encrypted
-  Scanner scanner= new Scanner(System.in);  // Using the Scanner class I imported in the forst line. 
-  String input = scanner.nextLine();
-  return input;
+// Denne metode vender en string bagvendt. Jeg valgte at tilføje dette til krypteringen for at gøre den en smule sværre at dekryptere.
+String reverseString(String str) {
+  String ret = "";
+
+  for (int i = 1; i <= str.length(); ++i) {
+    ret = ret + str.charAt(str.length()-i);
+  }
+  return ret;
 }
